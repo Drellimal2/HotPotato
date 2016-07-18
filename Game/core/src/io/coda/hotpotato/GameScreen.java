@@ -10,10 +10,14 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
  * Created by Dane on 7/17/2016.
  */
 public class GameScreen implements Screen {
-
+    HotPotatoGame game;
     SpriteBatch batch;
     Potato potato;
     ExtendViewport viewport;
+
+    public GameScreen(HotPotatoGame game){
+        this.game = game;
+    }
 
     @Override
     public void show() {
