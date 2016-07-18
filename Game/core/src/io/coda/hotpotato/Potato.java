@@ -52,11 +52,11 @@ public class Potato extends InputAdapter {
                 && worldClick.y > ymindif && worldClick.y < ymaxdif )  {
             Gdx.app.log("POTATO", "Inside");
             if(worldClick.x < position.x){
-                velocity.x = Constants.PUSH_FORCE;
+                velocity.x += Constants.PUSH_FORCE;
             } else{
-                velocity.x = -Constants.PUSH_FORCE;
+                velocity.x -= Constants.PUSH_FORCE;
             }
-            velocity.y = getForce(ymaxdif - worldClick.y);
+            velocity.y += getForce(ymaxdif - worldClick.y);
 
         }
         collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -96,9 +96,10 @@ public class Potato extends InputAdapter {
             position.y = Constants.POTATO_HEIGHT/2;
             velocity.y = -velocity.y/2;
         }
-        if (position.y + Constants.POTATO_HEIGHT/2 > viewportHeight) {
-            position.y = viewportHeight - Constants.POTATO_HEIGHT/2;
-            velocity.y = -velocity.y;
+        if (position.y - Constants.POTATO_HEIGHT/2 > viewportHeight) {
+
+//            position.y = viewportHeight - Constants.POTATO_HEIGHT/2;
+//            velocity.y = -velocity.y;
         }
     }
 

@@ -3,6 +3,7 @@ package io.coda.hotpotato;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -14,6 +15,8 @@ public class GameScreen implements Screen {
     SpriteBatch batch;
     Potato potato;
     ExtendViewport viewport;
+    Texture background;
+
 
     public GameScreen(HotPotatoGame game){
         this.game = game;
@@ -26,6 +29,7 @@ public class GameScreen implements Screen {
         viewport =new ExtendViewport(aspect_ratio * Constants.WORLD_HEIGHT, Constants.WORLD_HEIGHT );
 //        viewport =new ExtendViewport(aspect_ratio * Constants.WORLD_HEIGHT, Constants.WORLD_HEIGHT );
         potato = new Potato(viewport);
+        background = new Texture(Constants.BACKGROUND_GAME_TEXTURE);
         Gdx.input.setInputProcessor(potato);
     }
 
@@ -36,6 +40,7 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(viewport.getCamera().combined);
         potato.update(delta);
         batch.begin();
+        batch.draw(background, 0, viewport.getWorldHeight()/3, viewport.getWorldWidth(),viewport.getWorldHeight() *2/3 );
         potato.render(batch);
         batch.end();
     }

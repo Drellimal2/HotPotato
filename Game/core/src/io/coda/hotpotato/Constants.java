@@ -5,7 +5,8 @@ package io.coda.hotpotato;
  */
 public class Constants {
 
-    public static final float GRAVITY = -19.81f;
+//    public static final float GRAVITY = -69.81f;
+    public static final float GRAVITY = -100f;
     public static final float DRAG = -10f;
 
 
@@ -14,6 +15,7 @@ public class Constants {
     public static final String LOGO_TEXTURE = "hotpotato_logo.png";
     public static final String PLAY_TEXTURE = "menu_item_play.png";
     public static final String ACHIEVEMENT_TEXTURE = "menu_item_achievement.png";
+    public static final String BACKGROUND_GAME_TEXTURE = "background_main.png";
 
 
     //Dimensions
@@ -26,7 +28,7 @@ public class Constants {
     public static final float HOME_PADDING = WORLD_HEIGHT/20;
 
     //Values
-    public static final float PUSH_FORCE = 20f;
+    public static final float PUSH_FORCE = 70f;
 
     public static final float MULTIPLIER_LEVEL_1 = 0.5f;
     public static final float MULTIPLIER_LEVEL_2 = 0.75f;

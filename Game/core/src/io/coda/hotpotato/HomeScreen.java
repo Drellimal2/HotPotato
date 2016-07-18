@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -49,7 +50,8 @@ public class HomeScreen extends InputAdapter implements Screen {
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         float aspect_ratio = Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-        float logo_width = viewport.getWorldWidth() - 2*Constants.HOME_PADDING;
+        float logo_width = MathUtils.clamp(Constants.LOGO_HEIGHT, 0 ,
+                viewport.getWorldWidth() - 2*Constants.HOME_PADDING);
         float logox = (viewport.getWorldWidth() - logo_width)/2;
         batch.begin();
         batch.draw(LOGO, logox,
