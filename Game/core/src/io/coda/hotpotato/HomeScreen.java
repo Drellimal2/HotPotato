@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 /**
@@ -39,26 +40,31 @@ public class HomeScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+        viewport.apply();
+
         Gdx.gl.glClearColor(1,0.67f, 0.32f, 1);
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        batch.begin();
+
         float aspect_ratio = Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-        float logo_width = aspect_ratio * Constants.LOGO_HEIGHT;
+        float logo_width = viewport.getWorldWidth() - 2*Constants.HOME_PADDING;
         float logox = (viewport.getWorldWidth() - logo_width)/2;
+        batch.begin();
         batch.draw(LOGO, logox,
                 Constants.WORLD_HEIGHT - Constants.LOGO_HEIGHT - Constants.HOME_PADDING,
                 logo_width, Constants.LOGO_HEIGHT);
 
 
-        float menu_item_width = Constants.MENU_ITEM_WIDTH * aspect_ratio;
+        float menu_item_width = viewport.getWorldWidth() - 2*Constants.HOME_PADDING;
         float playy = Constants.WORLD_HEIGHT - Constants.LOGO_HEIGHT - 3*Constants.HOME_PADDING
                 - Constants.MENU_ITEM_HEIGHT;
-        float menu_itemX = (viewport.getWorldWidth() - menu_item_width)/2;
+        float menu_itemX = Constants.HOME_PADDING;
         batch.draw(PLAY, menu_itemX, playy, menu_item_width, Constants.MENU_ITEM_HEIGHT);
         float achy = Constants.WORLD_HEIGHT - Constants.LOGO_HEIGHT - 4*Constants.HOME_PADDING
                 - 2*Constants.MENU_ITEM_HEIGHT;
+
         batch.draw(ACH, menu_itemX, achy, menu_item_width, Constants.MENU_ITEM_HEIGHT);
         batch.end();
     }
@@ -94,6 +100,17 @@ public class HomeScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector2 worldTouch = viewport.unproject(new Vector2(screenX, screenY));
+        float aspect_ratio = Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
+        float menu_item_width = Constants.MENU_ITEM_WIDTH * aspect_ratio;
+        float playy = Constants.WORLD_HEIGHT - Constants.LOGO_HEIGHT - 3*Constants.HOME_PADDING
+                - Constants.MENU_ITEM_HEIGHT;
+        float menu_itemX = (viewport.getWorldWidth() - menu_item_width)/2;
+        float achy = Constants.WORLD_HEIGHT - Constants.LOGO_HEIGHT - 4*Constants.HOME_PADDING
+                - 2*Constants.MENU_ITEM_HEIGHT;
+        if (worldTouch.y > playy && worldTouch.y < playy + Constants.MENU_ITEM_HEIGHT){
+            game.showGame();
+        }
         return super.touchDown(screenX, screenY, pointer, button);
     }
 }

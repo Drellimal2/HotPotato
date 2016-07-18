@@ -5,7 +5,7 @@ package io.coda.hotpotato;
  */
 public class Constants {
 
-    public static final float GRAVITY = -9.81f;
+    public static final float GRAVITY = -19.81f;
     public static final float DRAG = -10f;
 
 
