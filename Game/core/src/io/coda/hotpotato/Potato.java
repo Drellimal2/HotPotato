@@ -1,7 +1,5 @@
 package io.coda.hotpotato;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * Created by Dane on 7/17/2016.
  */
-public class Potato extends InputAdapter {
+public class Potato{
 
     Vector2 position;
     Vector2 velocity;
@@ -37,36 +35,36 @@ public class Potato extends InputAdapter {
         velocity = new Vector2();
     }
 
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
-        Gdx.app.log("POTATO W", worldClick.toString());
-        Gdx.app.log("POTATO P", position.toString());
-
-        float xmaxdif = position.x + Constants.POTATO_WIDTH / 2;
-        float xmindif = position.x - Constants.POTATO_WIDTH / 2;
-        float ymaxdif = position.y + Constants.POTATO_HEIGHT / 2;
-        float ymindif = position.y - Constants.POTATO_HEIGHT / 2;
-
-        if ( worldClick.x > xmindif && worldClick.x < xmaxdif
-                && worldClick.y > ymindif && worldClick.y < ymaxdif )  {
-            Gdx.app.log("POTATO", "Inside");
-            if(worldClick.x < position.x){
-                velocity.x += Constants.PUSH_FORCE;
-            } else{
-                velocity.x -= Constants.PUSH_FORCE;
-            }
-            velocity.y += getForce(ymaxdif - worldClick.y);
-
-        }
-        collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return super.touchUp(screenX, screenY, pointer, button);
-    }
+//    @Override
+//    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+//        Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
+//        Gdx.app.log("POTATO W", worldClick.toString());
+//        Gdx.app.log("POTATO P", position.toString());
+//
+//        float xmaxdif = position.x + Constants.POTATO_WIDTH / 2;
+//        float xmindif = position.x - Constants.POTATO_WIDTH / 2;
+//        float ymaxdif = position.y + Constants.POTATO_HEIGHT / 2;
+//        float ymindif = position.y - Constants.POTATO_HEIGHT / 2;
+//
+//        if ( worldClick.x > xmindif && worldClick.x < xmaxdif
+//                && worldClick.y > ymindif && worldClick.y < ymaxdif )  {
+//            Gdx.app.log("POTATO", "Inside");
+//            if(worldClick.x < position.x){
+//                velocity.x += Constants.PUSH_FORCE;
+//            } else{
+//                velocity.x -= Constants.PUSH_FORCE;
+//            }
+//            velocity.y += getForce(ymaxdif - worldClick.y);
+//
+//        }
+//        collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+//        return super.touchUp(screenX, screenY, pointer, button);
+//    }
 
     public void update(float delta) {
         position.y += changeS(velocity.y, delta);
@@ -79,11 +77,11 @@ public class Potato extends InputAdapter {
             }
         }
         velocity.y += delta * Constants.GRAVITY;
-        velocity.clamp(0, 101);
+        velocity.clamp(0, 150);
         collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
     }
 
-    private void collideWithWalls(float viewportWidth, float viewportHeight) {
+    public void collideWithWalls(float viewportWidth, float viewportHeight) {
         if (position.x - Constants.POTATO_WIDTH/2 < 0) {
             position.x = Constants.POTATO_WIDTH/2;
             velocity.x = -velocity.x;
@@ -126,7 +124,7 @@ public class Potato extends InputAdapter {
     }
 
 
-    private float getForce(float diff){
+    public float getForce(float diff){
         float scale = Constants.POTATO_HEIGHT;
         float result = Constants.PUSH_FORCE;
 
