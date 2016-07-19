@@ -16,6 +16,7 @@ public class Constants {
     public static final String PLAY_TEXTURE = "menu_item_play.png";
     public static final String ACHIEVEMENT_TEXTURE = "menu_item_achievement.png";
     public static final String BACKGROUND_GAME_TEXTURE = "background_main.png";
+    public static final String BACKGROUND_OVEN = "oven_background.png";
 
 
     //Dimensions
@@ -28,7 +29,7 @@ public class Constants {
     public static final float HOME_PADDING = WORLD_HEIGHT/20;
 
     //Values
-    public static final float PUSH_FORCE = 70f;
+    public static final float PUSH_FORCE = 40f;
 
     public static final float MULTIPLIER_LEVEL_1 = 0.5f;
     public static final float MULTIPLIER_LEVEL_2 = 0.75f;
