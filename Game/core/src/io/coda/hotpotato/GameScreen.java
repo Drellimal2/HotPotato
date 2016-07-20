@@ -24,7 +24,9 @@ public class GameScreen extends InputAdapter implements Screen {
     ExtendViewport viewport;
     Texture background;
     BitmapFont HUD_Font;
+    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private long taps = 0;
+    FreeTypeFontGenerator generator;
 
 
     public GameScreen(HotPotatoGame game){
@@ -35,16 +37,18 @@ public class GameScreen extends InputAdapter implements Screen {
     public void show() {
         batch = new SpriteBatch();
         HUD = new ScreenViewport();
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 25;
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("DIGITALDREAM.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        int font_size = HUD.getScreenHeight()/8;
+        parameter.size = 144;
         parameter.color = new Color(1,232/255f,81f/255,1);
         parameter.borderColor = new Color(1,179/255f,81f/255,1);
         parameter.borderWidth = 2;
-
+//        HUD.setWorldHeight(100f);
         HUD_Font = generator.generateFont(parameter); // font size 12 pixels
         HUD_Font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        HUD_Font.getData().setScale(5f);
+//        HUD_Font.getData().setScale(5f);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
         float aspect_ratio = Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
@@ -70,7 +74,9 @@ public class GameScreen extends InputAdapter implements Screen {
         HUD.apply();
         batch.setProjectionMatrix(HUD.getCamera().combined);
         batch.begin();
-        HUD_Font.draw(batch, ""+taps, HUD.getWorldWidth()/2, HUD.getWorldHeight()*9/10);
+        float HUD_X = 100f*HUD.getWorldWidth()/512;
+        float HUD_Y = 990*HUD.getWorldHeight()/1024f;
+        HUD_Font.draw(batch, ""+taps, HUD_X, HUD_Y);
         batch.end();
     }
 
@@ -78,6 +84,12 @@ public class GameScreen extends InputAdapter implements Screen {
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         HUD.update(width, height, true);
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("DIGITALDREAM.ttf"));
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
+        parameter.size = (int) HUD.getScreenHeight()/8;
+        HUD_Font = generator.generateFont(parameter); // font size 12 pixels
+//        HUD_Font.getData().setScale(5f);
+        generator.dispose();
         potato.init();
     }
 
@@ -92,6 +104,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
+
     }
 
     @Override
@@ -123,6 +136,7 @@ public class GameScreen extends InputAdapter implements Screen {
             potato.velocity.y += potato.getForce(ymaxdif - worldClick.y);
 
         }
+
         potato.collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
         return super.touchDown(screenX, screenY, pointer, button);
     }
