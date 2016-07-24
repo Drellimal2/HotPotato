@@ -1,9 +1,8 @@
-package io.coda.hotpotato;
+package io.coda.hotpotatoretro;
 
 import com.badlogic.gdx.Game;
 
-public class HotPotatoGame extends Game {
-
+public class HotPotatoRetroGame extends Game {
 
 	@Override
 	public void create() {
@@ -16,7 +15,7 @@ public class HotPotatoGame extends Game {
 	}
 
 	public void showGame(){
-		setScreen(new GameScreen(this));
+		setScreen(new RetroGameScreen(this));
 	}
 
 

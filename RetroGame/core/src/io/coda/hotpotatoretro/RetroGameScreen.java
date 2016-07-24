@@ -1,4 +1,4 @@
-package io.coda.hotpotato;
+package io.coda.hotpotatoretro;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -14,22 +14,27 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
- * Created by Dane on 7/17/2016.
+ * Created by Dane on 7/20/2016.
  */
-public class GameScreen extends InputAdapter implements Screen {
-    HotPotatoGame game;
+public class RetroGameScreen extends InputAdapter implements Screen {
+
+
+    HotPotatoRetroGame game;
     SpriteBatch batch;
-    Potato potato;
+    RetroPotato potato;
+    Potatoes potatoes;
+    Player player;
     ScreenViewport HUD;
     ExtendViewport viewport;
     Texture background;
     BitmapFont HUD_Font;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+
     private long taps = 0;
     FreeTypeFontGenerator generator;
 
 
-    public GameScreen(HotPotatoGame game){
+    public RetroGameScreen(HotPotatoRetroGame game){
         this.game = game;
     }
 
@@ -37,20 +42,27 @@ public class GameScreen extends InputAdapter implements Screen {
     public void show() {
         batch = new SpriteBatch();
         HUD = new ScreenViewport();
+
         generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 144;
         parameter.color = new Color(1,232/255f,81f/255,1);
         parameter.borderColor = new Color(1,179/255f,81f/255,1);
         parameter.borderWidth = 2;
-        HUD_Font = generator.generateFont(parameter); // font size 12 pixels
+
+        HUD_Font = generator.generateFont(parameter);
         HUD_Font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        generator.dispose();
+
 
         float aspect_ratio = Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
         viewport =new ExtendViewport(aspect_ratio * Constants.WORLD_HEIGHT, Constants.WORLD_HEIGHT );
-        potato = new Potato(viewport);
-        background = new Texture(Constants.BACKGROUND_KITCHEN);
+
+        potatoes = new Potatoes(viewport);
+//        potato = new RetroPotato(viewport);
+        player = new Player(viewport);
+//        background = new Texture(Constants.BACKGROUND_KITCHEN);
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -60,32 +72,42 @@ public class GameScreen extends InputAdapter implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        potato.update(delta);
+
+        potatoes.update(delta);
+        player.update(delta);
+        player.hitPotatoes(potatoes);
         batch.begin();
-        batch.draw(background, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
-        potato.render(batch);
+
+        potatoes.render(batch);
+        player.render(batch);
+
         batch.end();
 
         HUD.apply();
+
         batch.setProjectionMatrix(HUD.getCamera().combined);
         batch.begin();
+
         float HUD_X = 100f*HUD.getWorldWidth()/512;
         float HUD_Y = 990*HUD.getWorldHeight()/1024f;
+
         HUD_Font.draw(batch, ""+taps, HUD_X, HUD_Y);
+
         batch.end();
+
+
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         HUD.update(width, height, true);
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("DIGITALDREAM.ttf"));
-//        generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("MANIFESTO.ttf"));
         parameter.size = (int) HUD.getScreenHeight()/8;
         HUD_Font = generator.generateFont(parameter); // font size 12 pixels
-//        HUD_Font.getData().setScale(5f);
         generator.dispose();
-        potato.init();
+        potatoes.init();
+        player.init();
     }
 
     @Override
@@ -111,28 +133,31 @@ public class GameScreen extends InputAdapter implements Screen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
-        Gdx.app.log("POTATO W", worldClick.toString());
-        Gdx.app.log("POTATO P", potato.position.toString());
-
-        float xmaxdif = potato.position.x + Constants.POTATO_WIDTH / 2;
-        float xmindif = potato.position.x - Constants.POTATO_WIDTH / 2;
-        float ymaxdif = potato.position.y + Constants.POTATO_HEIGHT / 2;
-        float ymindif = potato.position.y - Constants.POTATO_HEIGHT / 2;
-
-        if ( worldClick.x > xmindif && worldClick.x < xmaxdif
-                && worldClick.y > ymindif && worldClick.y < ymaxdif )  {
-            Gdx.app.log("POTATO", "Inside");
-            taps += 1;
-            if(worldClick.x < potato.position.x){
-                potato.velocity.x += Constants.PUSH_FORCE;
-            } else{
-                potato.velocity.x -= Constants.PUSH_FORCE;
-            }
-            potato.velocity.y += potato.getForce(ymaxdif - worldClick.y);
+        if (worldClick.x > viewport.getWorldWidth()/2){
+            Gdx.app.log("P", "Right");
+        } else {
+            Gdx.app.log("P", "Left");
 
         }
 
-        potato.collideWithWalls(viewport.getWorldWidth(), viewport.getWorldHeight());
+
         return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
+        if (worldClick.x > viewport.getWorldWidth()/2){
+            Gdx.app.log("D", "Right");
+        } else {
+            Gdx.app.log("D", "Left");
+
+        }
+        return super.touchDragged(screenX, screenY, pointer);
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return super.touchUp(screenX, screenY, pointer, button);
     }
 }

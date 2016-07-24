@@ -1,4 +1,4 @@
-package io.coda.hotpotato;
+package io.coda.hotpotatoretro;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -16,14 +16,14 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 public class HomeScreen extends InputAdapter implements Screen {
 
     ExtendViewport viewport;
-    HotPotatoGame game;
+    HotPotatoRetroGame game;
     SpriteBatch batch;
     Texture LOGO;
     Texture PLAY;
     Texture ACH;
 
 
-    public HomeScreen(HotPotatoGame game){
+    public HomeScreen(HotPotatoRetroGame game){
         this.game = game;
     }
 
